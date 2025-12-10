@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_KEY } from "./config.js";
@@ -6,9 +6,9 @@ import { API_KEY } from "./config.js";
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-export default function Startpage() {
+export default function Startpage({ setShowPage, setMovieDetails }) {
   const [search, setSearch] = useState("");
-  const [movie, setMovie] = useState([]);
+  const [movies, setMovies] = useState([]);
 
   const tmdbClient = axios.create({
     baseURL: BASE_URL,
@@ -27,7 +27,7 @@ export default function Startpage() {
           page: 1,
         },
       });
-      setMovie(response.data.results);
+      setMovies(response.data.results);
     } catch (error) {
       console.log(error);
     }
@@ -44,9 +44,18 @@ export default function Startpage() {
         style={styles.input}
         onChangeText={(text) => setSearch(text)}
       />
-      {movie.length > 0 &&
-        movie.map((m) => (
-          <Text style={styles.suggestions}>{m.title}</Text>
+      {movies.length > 0 &&
+        movies.map((movie, idx) => (
+          <Text
+            key={idx}
+            style={styles.suggestions}
+            onPress={() => {
+              setMovieDetails(movie);
+              setShowPage("MovieDetails");
+            }}
+          >
+            {movie.title}
+          </Text>
         ))}
     </View>
   );
@@ -66,11 +75,6 @@ const styles = StyleSheet.create({
     width: 200,
     borderRadius: 5,
     marginBottom: 20,
-  },
-  text: {
-    fontFamily: "Helvetica",
-    fontSize: 16,
-    color: "white",
   },
   suggestions: {
     fontFamily: "Helvetica",
