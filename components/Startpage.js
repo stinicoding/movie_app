@@ -44,9 +44,10 @@ export default function Startpage() {
         style={styles.input}
         onChangeText={(text) => setSearch(text)}
       />
-      {movie.length > 0 && (
-        <Text style={styles.suggestions}>{movie[0].title}</Text>
-      )}
+      {movie.length > 0 &&
+        movie.map((m) => (
+          <Text style={styles.suggestions}>{m.title}</Text>
+        ))}
     </View>
   );
 }
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: 200,
     borderRadius: 5,
+    marginBottom: 20,
   },
   text: {
     fontFamily: "Helvetica",
