@@ -4,7 +4,6 @@ import axios from "axios";
 import { API_KEY } from "./config.js";
 
 const BASE_URL = "https://api.themoviedb.org/3";
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 export default function Startpage({ setShowPage, setMovieDetails }) {
   const [search, setSearch] = useState("");
@@ -81,5 +80,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
     backgroundColor: "white",
+    alignItems: "flex-start",
   },
 });
