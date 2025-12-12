@@ -11,6 +11,8 @@ export default function MovieDetails({ setShowPage, movie }) {
 
   const [year, month, day] = movie.release_date.split("-");
   const formattedDate = `${day}.${month}.${year}`;
+  const stars = Math.round(movie.vote_average / 2);
+  const maxStars = 5;
 
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
@@ -68,7 +70,10 @@ export default function MovieDetails({ setShowPage, movie }) {
         <Text style={styles.info}>
           Original Language: {LANGUAGES[movie.original_language]}
         </Text>
-        <Text style={styles.info}>Rating: {movie.vote_average}</Text>
+        <Text style={styles.info}>
+          Rating: {movie.vote_average}{" "}
+          {"★".repeat(stars) + "☆".repeat(maxStars - stars)}
+        </Text>
         <Text style={styles.info}>Popularity: {movie.popularity}</Text>
       </View>
     </View>

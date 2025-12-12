@@ -1,13 +1,15 @@
 import { StyleSheet, Text, View, TextInput } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { API_KEY } from "./config.js";
+import Carousel from "./Carousel.js";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 
 export default function Startpage({ setShowPage, setMovieDetails }) {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState([]);
+  const [topMovies, setTopMovies] = useState([]);
 
   const tmdbClient = axios.create({
     baseURL: BASE_URL,
@@ -26,18 +28,38 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
           page: 1,
         },
       });
-      setMovies(response.data.results);
+      const firstFive = response.data.results.slice(0, 5);
+      setMovies(firstFive);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const getTopRated = async () => {
+    try {
+      const response = await tmdbClient.get("/movie/top_rated", {
+        params: { page: 1 },
+      });
+      setTopMovies(response.data.results);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
+    if (search.length === 0) {
+      setMovies([]);
+      return;
+    }
     searchMovie(search);
   }, [search]);
 
+  useEffect(() => {
+    getTopRated();
+  }, []);
+
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.caption}>Find your next movie!</Text>
       <TextInput
         style={styles.input}
@@ -56,16 +78,37 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
             {movie.title}
           </Text>
         ))}
+      <View>
+        <Text style={styles.scroll_caption}>Top Movies</Text>
+        <Carousel
+          data={topMovies}
+          onPress={(movie) => {
+            setMovieDetails(movie);
+            setShowPage("MovieDetails");
+          }}
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    marginTop: 50,
+  },
   caption: {
     fontFamily: "Helvetica",
     fontSize: 21,
     color: "white",
     marginBottom: 10,
+  },
+  scroll_caption: {
+    fontFamily: "Helvetica",
+    fontSize: 18,
+    color: "white",
+    marginBottom: 10,
+    textAlign: "center",
   },
   input: {
     fontFamily: "Helvetica",
@@ -73,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: 200,
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   suggestions: {
     fontFamily: "Helvetica",
@@ -81,5 +124,16 @@ const styles = StyleSheet.create({
     color: "black",
     backgroundColor: "white",
     alignItems: "flex-start",
+  },
+  text: {
+    fontFamily: "Helvetica",
+    fontSize: 16,
+    color: "white",
+  },
+  poster: {
+    width: 170,
+    height: 250,
+    marginHorizontal: 10,
+    borderRadius: 12,
   },
 });
