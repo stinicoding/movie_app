@@ -10,6 +10,7 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState([]);
   const [topMovies, setTopMovies] = useState([]);
+  const [trendingWeek, setTrendingWeek] = useState([]);
 
   const tmdbClient = axios.create({
     baseURL: BASE_URL,
@@ -41,8 +42,19 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
         params: { page: 1 },
       });
       setTopMovies(response.data.results);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTrendingWeek = async () => {
+    try {
+      const response = await tmdbClient.get("/trending/movie/week", {
+        params: { page: 1 },
+      });
+      setTrendingWeek(response.data.results);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -56,6 +68,7 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
 
   useEffect(() => {
     getTopRated();
+    getTrendingWeek();
   }, []);
 
   return (
@@ -78,10 +91,20 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
             {movie.title}
           </Text>
         ))}
-      <View>
+      <View style={styles.carousel}>
         <Text style={styles.scroll_caption}>Top Movies</Text>
         <Carousel
           data={topMovies}
+          onPress={(movie) => {
+            setMovieDetails(movie);
+            setShowPage("MovieDetails");
+          }}
+        />
+      </View>
+      <View style={styles.carousel}>
+        <Text style={styles.scroll_caption}>Trending Movies of the Week</Text>
+        <Carousel
+          data={trendingWeek}
           onPress={(movie) => {
             setMovieDetails(movie);
             setShowPage("MovieDetails");
@@ -103,20 +126,13 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 10,
   },
-  scroll_caption: {
-    fontFamily: "Helvetica",
-    fontSize: 18,
-    color: "white",
-    marginBottom: 10,
-    textAlign: "center",
-  },
   input: {
     fontFamily: "Helvetica",
     fontSize: 16,
     backgroundColor: "white",
     width: 200,
     borderRadius: 5,
-    marginBottom: 40,
+    marginBottom: 10,
   },
   suggestions: {
     fontFamily: "Helvetica",
@@ -135,5 +151,16 @@ const styles = StyleSheet.create({
     height: 250,
     marginHorizontal: 10,
     borderRadius: 12,
+  },
+  scroll_caption: {
+    fontFamily: "Helvetica",
+    fontSize: 18,
+    color: "white",
+    marginBottom: 10,
+    marginTop: 20,
+    textAlign: "center",
+  },
+  carousel: {
+    width: "100%",
   },
 });
