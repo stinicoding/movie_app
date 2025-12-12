@@ -11,6 +11,7 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
   const [movies, setMovies] = useState([]);
   const [topMovies, setTopMovies] = useState([]);
   const [trendingWeek, setTrendingWeek] = useState([]);
+  const [upcomingMovies, setUpcomingMovies] = useState([])
 
   const tmdbClient = axios.create({
     baseURL: BASE_URL,
@@ -58,6 +59,17 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
     }
   };
 
+  const getUpcoming = async () => {
+    try {
+      const response = await tmdbClient.get("/movie/upcoming", {
+        params: {page: 1},
+      });
+      setUpcomingMovies(response.data.results);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     if (search.length === 0) {
       setMovies([]);
@@ -69,11 +81,12 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
   useEffect(() => {
     getTopRated();
     getTrendingWeek();
+    getUpcoming();
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.caption}>Find your next movie!</Text>
+      <Text style={styles.caption}>Find your next Movie!</Text>
       <TextInput
         style={styles.input}
         onChangeText={(text) => setSearch(text)}
@@ -111,6 +124,16 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
           }}
         />
       </View>
+      <View style={styles.carousel}>
+        <Text style={styles.scroll_caption}>Coming Soon</Text>
+        <Carousel
+          data={upcomingMovies}
+          onPress={(movie) => {
+            setMovieDetails(movie);
+            setShowPage("MovieDetails");
+          }}
+        />
+      </View>
     </View>
   );
 }
@@ -123,7 +146,7 @@ const styles = StyleSheet.create({
   caption: {
     fontFamily: "Helvetica",
     fontSize: 21,
-    color: "white",
+    color: "#0800a2ff",
     marginBottom: 10,
   },
   input: {
