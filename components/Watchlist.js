@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 
-export default function Startpage({ setShowPage, watchlist }) {
+export default function Watchlist({ setShowPage, watchlist }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+  console.log(watchlist);
   return (
-    <View>
+    <ScrollView>
       <View style={styles.icons}>
         <Text style={styles.icon} onPress={() => setShowPage("Startpage")}>
           ⇦
@@ -13,15 +13,18 @@ export default function Startpage({ setShowPage, watchlist }) {
       </View>
       <View style={styles.container}>
         {watchlist?.length > 0 &&
-          watchlist.map((movie) => {
-            <Image
-              style={styles.poster}
-              source={{ uri: IMAGE_BASE_URL + movie.poster_path }}
-              onPress={() => setShowPage("MovieDetails")}
-            />;
+          watchlist.map((movie, idx) => {
+            return (
+              <Image
+                key={idx}
+                style={styles.poster}
+                source={{ uri: IMAGE_BASE_URL + movie.poster_path }}
+                onPress={() => setShowPage("MovieDetails")}
+              />
+            );
           })}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

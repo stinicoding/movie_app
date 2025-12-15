@@ -22,7 +22,7 @@ export default function App() {
 
   useEffect(() => {
     getWatchlist()
-  }, [watchlist])
+  }, [showPage])
 
   return (
     <SafeAreaProvider>

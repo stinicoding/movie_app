@@ -56,29 +56,41 @@ export default function MovieDetails({
         const found = watchlist.find(
           (m) => JSON.stringify(m) == JSON.stringify(movie)
         );
-        found?.length > 0 && setFav(true);
+        found && setFav(true);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const updateWatchlist = async () => {
+  const updateWatchlist = async (action) => {
+    if (action === "delete") {
+      try {
+        const filteredMovies = watchlist.filter(
+          (m) => JSON.stringify(m) !== JSON.stringify(movie)
+        );
+        await AsyncStorage.setItem("favs", JSON.stringify(filteredMovies));
+        setWatchlist(filteredMovies);
+      } catch (error) {
+        console.log(error);
+      }
+      return;
+    }
     try {
       const previousMovies = await AsyncStorage.getItem("favs");
-      console.log(previousMovies)
       let storedMovies;
       if (previousMovies === null) {
         storedMovies = await AsyncStorage.setItem(
           "favs",
-          JSON.stringify([fav])
+          JSON.stringify([movie])
         );
       } else {
         storedMovies = await AsyncStorage.setItem(
           "favs",
-          JSON.stringify([...previousMovies, fav])
+          JSON.stringify([...JSON.parse(previousMovies), movie])
         );
       }
+      //console.log(storedMovies);
       setWatchlist(storedMovies);
     } catch (error) {
       console.log(error);
@@ -91,10 +103,6 @@ export default function MovieDetails({
     searchMovieInWatchlist();
   }, []);
 
-  useEffect(() => {
-    updateWatchlist();
-  }, [fav]);
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.icons}>
@@ -102,11 +110,23 @@ export default function MovieDetails({
           ⇦
         </Text>
         {fav ? (
-          <Text style={styles.icon} onPress={() => setFav(false)}>
+          <Text
+            style={styles.icon}
+            onPress={() => {
+              setFav(false);
+              updateWatchlist("delete");
+            }}
+          >
             ♥
           </Text>
         ) : (
-          <Text style={styles.icon} onPress={() => setFav(true)}>
+          <Text
+            style={styles.icon}
+            onPress={() => {
+              setFav(true);
+              updateWatchlist("add");
+            }}
+          >
             ♡
           </Text>
         )}

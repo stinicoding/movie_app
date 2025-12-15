@@ -16,12 +16,15 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
   const [upcomingMovies, setUpcomingMovies] = useState([]);
 
   useEffect(() => {
-    if (search.length === 0) {
-      setMovies([]);
-      return;
-    }
-    let movie = searchMovie(search);
-    setSearch(movie);
+    const updateSearch = async () => {
+      if (search.length === 0) {
+        setMovies([]);
+        return;
+      }
+      let movie = searchMovie(search);
+      setMovies(movie);
+    };
+    updateSearch()
   }, [search]);
 
   useEffect(() => {
