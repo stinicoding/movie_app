@@ -21,7 +21,7 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
         setMovies([]);
         return;
       }
-      let movie = searchMovie(search);
+      let movie = await searchMovie(search);
       setMovies(movie);
     };
     updateSearch()
