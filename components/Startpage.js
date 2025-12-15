@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View, TextInput } from "react-native";
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import { API_KEY } from "./config.js";
+import { useState, useEffect } from "react";
 import Carousel from "./Carousel.js";
-
-const BASE_URL = "https://api.themoviedb.org/3";
+import {
+  searchMovie,
+  getTopRated,
+  getTrendingWeek,
+  getUpcoming,
+} from "../utils/functionsAPI.js";
 
 export default function Startpage({ setShowPage, setMovieDetails }) {
   const [search, setSearch] = useState("");
@@ -12,87 +14,36 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
   const [topMovies, setTopMovies] = useState([]);
   const [trendingWeek, setTrendingWeek] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [watchlist, setWatchlist] = useState([]);
-
-  const tmdbClient = axios.create({
-    baseURL: BASE_URL,
-    params: {
-      api_key: API_KEY,
-      language: "en-US",
-    },
-  });
-
-  const searchMovie = async (query) => {
-    if (!query) return [];
-    try {
-      const response = await tmdbClient.get("/search/movie", {
-        params: {
-          query: query,
-          page: 1,
-        },
-      });
-      const topFivePopular = response.data.results
-      .filter(movie => movie.popularity)
-      .sort((a, b) => b.popularity - a.popularity)
-      .slice(0, 5);
-      setMovies(topFivePopular);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getTopRated = async () => {
-    try {
-      const response = await tmdbClient.get("/movie/top_rated", {
-        params: { page: 1 },
-      });
-      setTopMovies(response.data.results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getTrendingWeek = async () => {
-    try {
-      const response = await tmdbClient.get("/trending/movie/week", {
-        params: { page: 1 },
-      });
-      setTrendingWeek(response.data.results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getUpcoming = async () => {
-    try {
-      const response = await tmdbClient.get("/movie/upcoming", {
-        params: { page: 1 },
-      });
-      setUpcomingMovies(response.data.results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     if (search.length === 0) {
       setMovies([]);
       return;
     }
-    searchMovie(search);
+    let movie = searchMovie(search);
+    setSearch(movie);
   }, [search]);
 
   useEffect(() => {
-    getTopRated();
-    getTrendingWeek();
-    getUpcoming();
+    const loadData = async () => {
+      let topRated = await getTopRated();
+      //console.log (topRated)
+      setTopMovies(topRated);
+      let trending = await getTrendingWeek();
+      setTrendingWeek(trending);
+      let upcoming = await getUpcoming();
+      setUpcomingMovies(upcoming);
+    };
+    loadData();
   }, []);
 
   return (
     <View>
       <View style={styles.icons}>
         <Text style={styles.icon}>⇦</Text>
-        <Text style={styles.icon} onPress={()=>setShowPage("Watchlist")}>♥</Text>
+        <Text style={styles.icon} onPress={() => setShowPage("Watchlist")}>
+          ♥
+        </Text>
       </View>
       <View style={styles.container}>
         <View style={styles.box}>

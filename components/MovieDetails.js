@@ -1,11 +1,16 @@
 import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import axios from "axios";
-import { API_KEY } from "./config.js";
+import { API_KEY } from "../config.js";
 import { useEffect, useState } from "react";
 import LANGUAGES from "../data.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function MovieDetails({ setShowPage, movie }) {
+export default function MovieDetails({
+  setShowPage,
+  movie,
+  watchlist,
+  setWatchlist,
+}) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   const GENRES = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`;
   const CAST = `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}`;
@@ -18,7 +23,8 @@ export default function MovieDetails({ setShowPage, movie }) {
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
   const [fav, setFav] = useState(false);
-  const [watchlist, setWatchlist] = useState([]);
+
+  //console.log(watchlist)
 
   const findGenres = async () => {
     try {
@@ -44,9 +50,23 @@ export default function MovieDetails({ setShowPage, movie }) {
     }
   };
 
+  const searchMovieInWatchlist = async () => {
+    try {
+      if (watchlist?.length > 0) {
+        const found = watchlist.find(
+          (m) => JSON.stringify(m) == JSON.stringify(movie)
+        );
+        found?.length > 0 && setFav(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const updateWatchlist = async () => {
     try {
       const previousMovies = await AsyncStorage.getItem("favs");
+      console.log(previousMovies)
       let storedMovies;
       if (previousMovies === null) {
         storedMovies = await AsyncStorage.setItem(
@@ -68,6 +88,7 @@ export default function MovieDetails({ setShowPage, movie }) {
   useEffect(() => {
     findGenres();
     findCast();
+    searchMovieInWatchlist();
   }, []);
 
   useEffect(() => {
