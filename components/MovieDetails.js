@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import axios from "axios";
 import { API_KEY } from "./config.js";
 import { useEffect, useState } from "react";
 import LANGUAGES from "../data.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function MovieDetails({ setShowPage, movie }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
@@ -16,6 +17,8 @@ export default function MovieDetails({ setShowPage, movie }) {
 
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
+  const [fav, setFav] = useState(false);
+  const [watchlist, setWatchlist] = useState([]);
 
   const findGenres = async () => {
     try {
@@ -41,17 +44,51 @@ export default function MovieDetails({ setShowPage, movie }) {
     }
   };
 
+  const updateWatchlist = async () => {
+    try {
+      const previousMovies = await AsyncStorage.getItem("favs");
+      let storedMovies;
+      if (previousMovies === null) {
+        storedMovies = await AsyncStorage.setItem(
+          "favs",
+          JSON.stringify([fav])
+        );
+      } else {
+        storedMovies = await AsyncStorage.setItem(
+          "favs",
+          JSON.stringify([...previousMovies, fav])
+        );
+      }
+      setWatchlist(storedMovies);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     findGenres();
     findCast();
   }, []);
 
+  useEffect(() => {
+    updateWatchlist();
+  }, [fav]);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.right}>
-        <Text style={styles.button} onPress={() => setShowPage("Startpage")}>
-          Back
+    <ScrollView style={styles.container}>
+      <View style={styles.icons}>
+        <Text style={styles.icon} onPress={() => setShowPage("Startpage")}>
+          ⇦
         </Text>
+        {fav ? (
+          <Text style={styles.icon} onPress={() => setFav(false)}>
+            ♥
+          </Text>
+        ) : (
+          <Text style={styles.icon} onPress={() => setFav(true)}>
+            ♡
+          </Text>
+        )}
       </View>
       <View>
         <Text style={styles.caption}>{movie.title}</Text>
@@ -76,7 +113,7 @@ export default function MovieDetails({ setShowPage, movie }) {
         </Text>
         <Text style={styles.info}>Popularity: {movie.popularity}</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -85,30 +122,33 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   caption: {
-    fontFamily: "Helvetica",
+    fontFamily: "Inter",
     fontSize: 21,
     color: "white",
+    fontWeight: 600,
     marginBottom: 10,
   },
   text: {
-    fontFamily: "Helvetica",
+    fontFamily: "Inter",
     fontSize: 16,
     color: "white",
   },
   info: {
-    fontFamily: "Helvetica",
+    fontFamily: "Inter",
     fontSize: 16,
     color: "white",
     marginBottom: 5,
   },
-  button: {
-    fontFamily: "Helvetica",
-    fontSize: 16,
-    color: "#011f65ff",
-    backgroundColor: "white",
-    borderRadius: 5,
-    textAlign: "center",
-    width: 50,
+  icon: {
+    fontSize: 35,
+    color: "pink",
+  },
+  icons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginLeft: 10,
+    marginRight: 10,
   },
   poster: {
     width: 200,
