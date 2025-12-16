@@ -8,7 +8,11 @@ import {
   getUpcoming,
 } from "../utils/functionsAPI.js";
 
-export default function Startpage({ setShowPage, setMovieDetails, setShowList }) {
+export default function Startpage({
+  setShowPage,
+  setMovieDetails,
+  setShowList,
+}) {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState([]);
   const [topMovies, setTopMovies] = useState([]);
@@ -90,7 +94,15 @@ export default function Startpage({ setShowPage, setMovieDetails, setShowList })
           />
         </View>
         <View style={styles.carousel}>
-          <Text style={styles.scroll_caption}>Trending Movies of the Week</Text>
+          <Text
+            style={styles.scroll_caption}
+            onPress={() => {
+              setShowPage("MovieList");
+              setShowList("Trending");
+            }}
+          >
+            Trending Movies
+          </Text>
           <Carousel
             data={trendingWeek}
             onPress={(movie) => {
@@ -100,7 +112,15 @@ export default function Startpage({ setShowPage, setMovieDetails, setShowList })
           />
         </View>
         <View style={styles.carousel}>
-          <Text style={styles.scroll_caption}>Coming Soon</Text>
+          <Text
+            style={styles.scroll_caption}
+            onPress={() => {
+              setShowPage("MovieList");
+              setShowList("Upcoming");
+            }}
+          >
+            Coming Soon
+          </Text>
           <Carousel
             data={upcomingMovies}
             onPress={(movie) => {

@@ -11,6 +11,7 @@ const tmdbClient = axios.create({
   },
 });
 
+//setMovies
 export const searchMovie = async (query) => {
   if (!query) return [];
   try {
@@ -24,7 +25,7 @@ export const searchMovie = async (query) => {
       .filter((movie) => movie.popularity)
       .sort((a, b) => b.popularity - a.popularity)
       .slice(0, 5);
-    return topFivePopular; //setMovies
+    return topFivePopular;
   } catch (error) {
     console.log(error);
   }
@@ -35,12 +36,10 @@ export const getTopRated = async () => {
   try {
     const requests = [];
     for (let page = 1; page <= 5; page++) {
-      requests.push(
-        tmdbClient.get("/movie/top_rated", { params: { page } })
-      );
+      requests.push(tmdbClient.get("/movie/top_rated", { params: { page } }));
     }
     const responses = await Promise.all(requests);
-    const allMovies = responses.flatMap(r => r.data.results);
+    const allMovies = responses.flatMap((r) => r.data.results);
     //console.log(`Fetched ${allMovies.length} movies successfully.`);
     return allMovies;
   } catch (error) {
@@ -49,24 +48,31 @@ export const getTopRated = async () => {
   }
 };
 
-
+//setTrendingWeek
 export const getTrendingWeek = async () => {
   try {
-    const response = await tmdbClient.get("/trending/movie/week", {
-      params: { page: 1 },
-    });
-    return response.data.results; //setTrendingWeek
+    const requests = [
+      tmdbClient.get("/trending/movie/week", { params: { page: 1 } }),
+      tmdbClient.get("/trending/movie/week", { params: { page: 2 } }),
+    ];
+    const responses = await Promise.all(requests);
+    return responses
+      .flatMap((r) => r.data.results)
+      .sort((a, b) => b.popularity - a.popularity);
   } catch (error) {
     console.log(error);
   }
 };
 
+//setUpcomingMovies
 export const getUpcoming = async () => {
   try {
-    const response = await tmdbClient.get("/movie/upcoming", {
-      params: { page: 1 },
-    });
-    return response.data.results; //setUpcomingMovies
+    const requests = [
+      tmdbClient.get("/movie/upcoming", { params: { page: 1 } }),
+      tmdbClient.get("/movie/upcoming", { params: { page: 2 } }),
+    ];
+    const responses = await Promise.all(requests);
+    return responses.flatMap((r) => r.data.results);
   } catch (error) {
     console.log(error);
   }

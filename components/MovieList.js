@@ -17,8 +17,8 @@ import {
 export default function MovieList({ setShowPage, setMovieDetails, showList }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   const [topMovies, setTopMovies] = useState([]);
-  //const [trendingWeek, setTrendingWeek] = useState([]);
-  //const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [trendingWeek, setTrendingWeek] = useState([]);
+  const [upcomingMovies, setUpcomingMovies] = useState([]);
   //console.log(topMovies);
 
   useEffect(() => {
@@ -26,10 +26,10 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
       let topRated = await getTopRated();
       //console.log (topRated)
       setTopMovies(topRated);
-      //let trending = await getTrendingWeek();
-      //setTrendingWeek(trending);
-      //let upcoming = await getUpcoming();
-      //setUpcomingMovies(upcoming);
+      let trending = await getTrendingWeek();
+      setTrendingWeek(trending);
+      let upcoming = await getUpcoming();
+      setUpcomingMovies(upcoming);
     };
     loadData();
   }, []);
@@ -51,6 +51,60 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
             <View style={styles.container}>
               {topMovies?.length > 0 &&
                 topMovies.map((movie, idx) => {
+                  return (
+                    <Pressable
+                      style={styles.imgwrapper}
+                      onPress={() => {
+                        setMovieDetails(movie);
+                        setShowPage("MovieDetails");
+                      }}
+                      key={idx}
+                    >
+                      <Image
+                        style={styles.poster}
+                        source={{ uri: IMAGE_BASE_URL + movie.poster_path }}
+                      />
+                    </Pressable>
+                  );
+                })}
+            </View>
+          </ScrollView>
+        </View>
+      )}
+      {showList === "Trending" && (
+        <View>
+          <Text style={styles.caption}>Trending of the Week</Text>
+          <ScrollView>
+            <View style={styles.container}>
+              {trendingWeek?.length > 0 &&
+                trendingWeek.map((movie, idx) => {
+                  return (
+                    <Pressable
+                      style={styles.imgwrapper}
+                      onPress={() => {
+                        setMovieDetails(movie);
+                        setShowPage("MovieDetails");
+                      }}
+                      key={idx}
+                    >
+                      <Image
+                        style={styles.poster}
+                        source={{ uri: IMAGE_BASE_URL + movie.poster_path }}
+                      />
+                    </Pressable>
+                  );
+                })}
+            </View>
+          </ScrollView>
+        </View>
+      )}
+      {showList === "Upcoming" && (
+        <View>
+          <Text style={styles.caption}> Coming Soon</Text>
+          <ScrollView>
+            <View style={styles.container}>
+              {upcomingMovies?.length > 0 &&
+                upcomingMovies.map((movie, idx) => {
                   return (
                     <Pressable
                       style={styles.imgwrapper}
