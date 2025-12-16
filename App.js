@@ -11,18 +11,20 @@ export default function App() {
   const [movieDetails, setMovieDetails] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
 
-   const getWatchlist = async () => {
+  const getWatchlist = async () => {
     try {
       const movies = await AsyncStorage.getItem("favs");
+      //const movies = await AsyncStorage.setItem("favs", JSON.stringify([])); //clearing local storage
       setWatchlist(JSON.parse(movies));
+      //setWatchlist([]); //clearing local storage
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getWatchlist()
-  }, [showPage])
+    getWatchlist();
+  }, [showPage]);
 
   return (
     <SafeAreaProvider>

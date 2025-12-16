@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 
 export default function Watchlist({ setShowPage, watchlist }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
-  console.log(watchlist);
+  //console.log(watchlist);
   return (
     <ScrollView>
       <View style={styles.icons}>
