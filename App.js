@@ -10,11 +10,13 @@ export default function App() {
   const [showPage, setShowPage] = useState("Startpage");
   const [movieDetails, setMovieDetails] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
+  const [back, setBack] = useState("");
 
   const getWatchlist = async () => {
     try {
       const movies = await AsyncStorage.getItem("favs");
       //const movies = await AsyncStorage.setItem("favs", JSON.stringify([])); //clearing local storage
+      //console.log(JSON.parse(movies))
       setWatchlist(JSON.parse(movies));
       //setWatchlist([]); //clearing local storage
     } catch (error) {
@@ -24,6 +26,11 @@ export default function App() {
 
   useEffect(() => {
     getWatchlist();
+    if (showPage === "Startpage") {
+      setBack("Startpage")
+    } else if (showPage === "Watchlist") {
+      setBack("Watchlist")
+    }
   }, [showPage]);
 
   return (
@@ -46,6 +53,7 @@ export default function App() {
               movie={movieDetails}
               watchlist={watchlist}
               setWatchlist={setWatchlist}
+              back={back}
             />
           )}
           {showPage === "Watchlist" && (
@@ -53,6 +61,8 @@ export default function App() {
               setShowPage={setShowPage}
               movie={movieDetails}
               watchlist={watchlist}
+              setMovieDetails={setMovieDetails}
+              setBack={setBack}
             />
           )}
         </SafeAreaView>

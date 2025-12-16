@@ -10,6 +10,7 @@ export default function MovieDetails({
   movie,
   watchlist,
   setWatchlist,
+  back
 }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   const GENRES = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`;
@@ -106,7 +107,7 @@ export default function MovieDetails({
   return (
     <ScrollView style={styles.container}>
       <View style={styles.icons}>
-        <Text style={styles.icon} onPress={() => setShowPage("Startpage")}>
+        <Text style={styles.icon} onPress={() => setShowPage(back)}>
           ⇦
         </Text>
         {fav ? (

@@ -43,7 +43,6 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
   return (
     <View>
       <View style={styles.icons}>
-        <Text style={styles.icon}>⇦</Text>
         <Text style={styles.icon} onPress={() => setShowPage("Watchlist")}>
           ♥
         </Text>
@@ -117,10 +116,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   icons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginLeft: 10,
+    marginLeft: "auto",
     marginRight: 10,
   },
   icon: {

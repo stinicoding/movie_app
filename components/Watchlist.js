@@ -1,36 +1,50 @@
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView, Pressable } from "react-native";
 
-export default function Watchlist({ setShowPage, watchlist }) {
+export default function Watchlist({ setShowPage, watchlist, setMovieDetails }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   //console.log(watchlist);
   return (
-    <ScrollView>
+    <View>
       <View style={styles.icons}>
         <Text style={styles.icon} onPress={() => setShowPage("Startpage")}>
           ⇦
         </Text>
         <Text style={styles.icon}>My Watchlist ♥</Text>
       </View>
-      <View style={styles.container}>
-        {watchlist?.length > 0 &&
-          watchlist.map((movie, idx) => {
-            return (
-              <Image
-                key={idx}
-                style={styles.poster}
-                source={{ uri: IMAGE_BASE_URL + movie.poster_path }}
-                onPress={() => setShowPage("MovieDetails")}
-              />
-            );
-          })}
-      </View>
-    </ScrollView>
+      <ScrollView>
+        <View style={styles.container}>
+          {watchlist?.length > 0 &&
+            watchlist.map((movie, idx) => {
+              return (
+                <Pressable
+                  style={styles.imgwrapper}
+                  onPress={() => {
+                    setMovieDetails(movie);
+                    setShowPage("MovieDetails");
+                  }}
+                  key={idx}
+                >
+                  <Image
+                    style={styles.poster}
+                    source={{ uri: IMAGE_BASE_URL + movie.poster_path }}
+                  />
+                </Pressable>
+              );
+            })}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 20,
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    marginBottom: 60,
   },
   icons: {
     flexDirection: "row",
@@ -44,9 +58,13 @@ const styles = StyleSheet.create({
     color: "pink",
   },
   poster: {
-    width: 170,
-    height: 250,
-    marginHorizontal: 10,
+    width: "100%",
+    height: 240,
     borderRadius: 12,
+  },
+  imgwrapper: {
+    width: "40%",
+    marginHorizontal: "5%",
+    marginVertical: "5%",
   },
 });
