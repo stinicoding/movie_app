@@ -3,6 +3,7 @@ import { StyleSheet, ImageBackground } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"; //npm install react-native-safe-area-context
 import Startpage from "./components/Startpage.js";
 import MovieDetails from "./components/MovieDetails.js";
+import MovieList from "./components/MovieList.js";
 import Watchlist from "./components/Watchlist.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -11,6 +12,7 @@ export default function App() {
   const [movieDetails, setMovieDetails] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
   const [back, setBack] = useState("");
+  const [showList, setShowList] = useState("");
 
   const getWatchlist = async () => {
     try {
@@ -45,6 +47,7 @@ export default function App() {
             <Startpage
               setShowPage={setShowPage}
               setMovieDetails={setMovieDetails}
+              setShowList={setShowList}
             />
           )}
           {showPage === "MovieDetails" && (
@@ -54,6 +57,15 @@ export default function App() {
               watchlist={watchlist}
               setWatchlist={setWatchlist}
               back={back}
+            />
+          )}
+          {showPage === "MovieList" && (
+            <MovieList
+              setShowPage={setShowPage}
+              setMovieDetails={setMovieDetails}
+              movie={movieDetails}
+              back={back}
+              showList={showList}
             />
           )}
           {showPage === "Watchlist" && (

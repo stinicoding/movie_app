@@ -8,7 +8,7 @@ import {
   getUpcoming,
 } from "../utils/functionsAPI.js";
 
-export default function Startpage({ setShowPage, setMovieDetails }) {
+export default function Startpage({ setShowPage, setMovieDetails, setShowList }) {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState([]);
   const [topMovies, setTopMovies] = useState([]);
@@ -24,14 +24,14 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
       let movie = await searchMovie(search);
       setMovies(movie);
     };
-    updateSearch()
+    updateSearch();
   }, [search]);
 
   useEffect(() => {
     const loadData = async () => {
       let topRated = await getTopRated();
       //console.log (topRated)
-      setTopMovies(topRated);
+      setTopMovies(topRated.slice(0, 20));
       let trending = await getTrendingWeek();
       setTrendingWeek(trending);
       let upcoming = await getUpcoming();
@@ -72,7 +72,15 @@ export default function Startpage({ setShowPage, setMovieDetails }) {
           </View>
         )}
         <View style={styles.carousel}>
-          <Text style={styles.scroll_caption}>Top Movies</Text>
+          <Text
+            style={styles.scroll_caption}
+            onPress={() => {
+              setShowPage("MovieList");
+              setShowList("Top100");
+            }}
+          >
+            Top Movies
+          </Text>
           <Carousel
             data={topMovies}
             onPress={(movie) => {

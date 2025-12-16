@@ -30,16 +30,25 @@ export const searchMovie = async (query) => {
   }
 };
 
+//setTopMovies
 export const getTopRated = async () => {
   try {
-    const response = await tmdbClient.get("/movie/top_rated", {
-      params: { page: 1 },
-    });
-    return response.data.results; //setTopMovies
+    const requests = [];
+    for (let page = 1; page <= 5; page++) {
+      requests.push(
+        tmdbClient.get("/movie/top_rated", { params: { page } })
+      );
+    }
+    const responses = await Promise.all(requests);
+    const allMovies = responses.flatMap(r => r.data.results);
+    //console.log(`Fetched ${allMovies.length} movies successfully.`);
+    return allMovies;
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching top 100:", error);
+    return []; // Return empty array so app doesn't crash
   }
 };
+
 
 export const getTrendingWeek = async () => {
   try {
