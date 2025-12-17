@@ -54,11 +54,13 @@ export default function MovieDetails({
 
   const searchMovieInWatchlist = async () => {
     try {
-      if (watchlist?.length > 0) {
-        const found = watchlist.find(
-          (m) => JSON.stringify(m) == JSON.stringify(movie)
-        );
-        found && setFav(true);
+      let found = watchlist.find((m) => m.id == movie.id);
+      //console.log(found);
+      found && setFav(true);
+      if (found) {
+        return true;
+      } else {
+        return false;
       }
     } catch (error) {
       console.log(error);
@@ -66,36 +68,44 @@ export default function MovieDetails({
   };
 
   const updateWatchlist = async (action) => {
-    if (action === "delete") {
+    let found = await searchMovieInWatchlist();
+    //console.log(found);
+    //delete favorite
+    if (action === "delete" && found) {
       try {
-        const filteredMovies = watchlist.filter(
-          (m) => JSON.stringify(m) !== JSON.stringify(movie)
-        );
+        const filteredMovies = watchlist.filter((m) => m.id !== movie.id);
         await AsyncStorage.setItem("favs", JSON.stringify(filteredMovies));
         setWatchlist(filteredMovies);
+        setFav(false);
       } catch (error) {
         console.log(error);
       }
       return;
     }
-    try {
-      const previousMovies = await AsyncStorage.getItem("favs");
-      let storedMovies;
-      if (previousMovies === null) {
-        storedMovies = await AsyncStorage.setItem(
-          "favs",
-          JSON.stringify([movie])
-        );
-      } else {
-        storedMovies = await AsyncStorage.setItem(
-          "favs",
-          JSON.stringify([...JSON.parse(previousMovies), movie])
-        );
+    //add favorite
+    else if (action === "add" && !fav) {
+      try {
+        const previousMovies = await AsyncStorage.getItem("favs");
+        let storedMovies;
+        if (previousMovies === null) {
+          storedMovies = await AsyncStorage.setItem(
+            "favs",
+            JSON.stringify([movie])
+          );
+        } else {
+          storedMovies = await AsyncStorage.setItem(
+            "favs",
+            JSON.stringify([...JSON.parse(previousMovies), movie])
+          );
+        }
+        //console.log(storedMovies);
+        setWatchlist(storedMovies);
+        setFav(true);
+      } catch (error) {
+        console.log(error);
       }
-      //console.log(storedMovies);
-      setWatchlist(storedMovies);
-    } catch (error) {
-      console.log(error);
+    } else {
+      console.log("error");
     }
   };
 
@@ -120,7 +130,6 @@ export default function MovieDetails({
             size={35}
             color="pink"
             onPress={() => {
-              setFav(false);
               updateWatchlist("delete");
             }}
           />
@@ -130,7 +139,6 @@ export default function MovieDetails({
             size={35}
             color="pink"
             onPress={() => {
-              setFav(true);
               updateWatchlist("add");
             }}
           />
