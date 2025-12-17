@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
+import Ionicons from "@react-native-vector-icons/ionicons";
 import { useState, useEffect } from "react";
 import { API_KEY } from "../config.js";
 import axios from "axios";
@@ -25,9 +26,12 @@ export default function GenreOverview({ setShowPage, setGenre }) {
   return (
     <View>
       <View style={styles.icons}>
-        <Text style={styles.icon} onPress={() => setShowPage("Startpage")}>
-          ⇦
-        </Text>
+        <Ionicons
+          name="chevron-back-circle"
+          size={35}
+          color="pink"
+          onPress={() => setShowPage("Startpage")}
+        />
         <Text style={styles.icon}>Genres ☰</Text>
       </View>
       <ScrollView style={styles.page}>

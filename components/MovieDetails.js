@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
+import Ionicons from "@react-native-vector-icons/ionicons";
 import axios from "axios";
 import { API_KEY } from "../config.js";
 import { useEffect, useState } from "react";
@@ -10,7 +11,7 @@ export default function MovieDetails({
   movie,
   watchlist,
   setWatchlist,
-  back
+  back,
 }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   const GENRES = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`;
@@ -105,57 +106,62 @@ export default function MovieDetails({
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.icons}>
-        <Text style={styles.icon} onPress={() => setShowPage(back)}>
-          ⇦
-        </Text>
+        <Ionicons
+          name="chevron-back-circle"
+          size={35}
+          color="pink"
+          onPress={() => setShowPage(back)}
+        />
         {fav ? (
-          <Text
-            style={styles.icon}
+          <Ionicons
+            name="heart"
+            size={35}
+            color="pink"
             onPress={() => {
               setFav(false);
               updateWatchlist("delete");
             }}
-          >
-            ♥
-          </Text>
+          />
         ) : (
-          <Text
-            style={styles.icon}
+          <Ionicons
+            name="heart-outline"
+            size={35}
+            color="pink"
             onPress={() => {
               setFav(true);
               updateWatchlist("add");
             }}
-          >
-            ♡
-          </Text>
+          />
         )}
       </View>
-      <View>
-        <Text style={styles.caption}>{movie.title}</Text>
-        <Text style={styles.text}>{movie.overview}</Text>
-      </View>
-      <View style={styles.center}>
-        <Image
-          style={styles.poster}
-          source={{ uri: IMAGE_BASE_URL + movie.poster_path }}
-        />
-      </View>
-      <View>
-        <Text style={styles.info}>Released: {formattedDate}</Text>
-        <Text style={styles.info}>Genres: {genres.join(", ")}</Text>
-        <Text style={styles.info}>Cast: {cast.join(", ")}</Text>
-        <Text style={styles.info}>
-          Original Language: {LANGUAGES[movie.original_language]}
-        </Text>
-        <Text style={styles.info}>
-          Rating: {movie.vote_average}{" "}
-          {"★".repeat(stars) + "☆".repeat(maxStars - stars)}
-        </Text>
-        <Text style={styles.info}>Popularity: {movie.popularity}</Text>
-      </View>
-    </ScrollView>
+      <ScrollView>
+        <View>
+          <Text style={styles.caption}>{movie.title}</Text>
+          <Text style={styles.text}>{movie.overview}</Text>
+        </View>
+        <View style={styles.center}>
+          <Image
+            style={styles.poster}
+            source={{ uri: IMAGE_BASE_URL + movie.poster_path }}
+          />
+        </View>
+        <View>
+          <Text style={styles.info}>Released: {formattedDate}</Text>
+          <Text style={styles.info}>Genres: {genres.join(", ")}</Text>
+          <Text style={styles.info}>Cast: {cast.join(", ")}</Text>
+          <Text style={styles.info}>
+            Original Language: {LANGUAGES[movie.original_language]}
+          </Text>
+          <Text style={styles.info}>
+            Rating: {movie.vote_average}{" "}
+            {"★".repeat(stars) + "☆".repeat(maxStars - stars)}
+          </Text>
+          <Text style={styles.info}>Popularity: {movie.popularity}</Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 

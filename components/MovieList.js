@@ -6,6 +6,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
+import Ionicons from "@react-native-vector-icons/ionicons";
 import { useState, useEffect } from "react";
 import {
   getTopRated,
@@ -42,12 +43,18 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
   return (
     <View>
       <View style={styles.icons}>
-        <Text style={styles.icon} onPress={() => setShowPage("Startpage")}>
-          ⇦
-        </Text>
-        <Text style={styles.icon} onPress={() => setShowPage("Watchlist")}>
-          ♥
-        </Text>
+        <Ionicons
+          name="chevron-back-circle"
+          size={35}
+          color="pink"
+          onPress={() => setShowPage("Startpage")}
+        />
+        <Ionicons
+          name="heart"
+          size={35}
+          color="pink"
+          onPress={() => setShowPage("Watchlist")}
+        />
       </View>
       {showList === "Top100" && (
         <View>

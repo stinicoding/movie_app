@@ -6,6 +6,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
+import Ionicons from "@react-native-vector-icons/ionicons";
 import { useState, useEffect } from "react";
 import { getMoviesByGenre } from "../utils/functionsAPI";
 
@@ -33,12 +34,18 @@ export default function MovieListPerGenre({
   return (
     <View>
       <View style={styles.icons}>
-        <Text style={styles.icon} onPress={() => setShowPage("GenreOverview")}>
-          ⇦
-        </Text>
-        <Text style={styles.icon} onPress={() => setShowPage("Watchlist")}>
-          ♥
-        </Text>
+        <Ionicons
+          name="chevron-back-circle"
+          size={35}
+          color="pink"
+          onPress={() => setShowPage("GenreOverview")}
+        />
+        <Ionicons
+          name="heart"
+          size={35}
+          color="pink"
+          onPress={() => setShowPage("Watchlist")}
+        />
       </View>
       <Text style={styles.caption}>{genre.name}</Text>
       <ScrollView style={styles.page}>

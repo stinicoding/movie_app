@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ScrollView,
+  Pressable,
+} from "react-native";
+import Ionicons from "@react-native-vector-icons/ionicons";
 
 export default function Watchlist({ setShowPage, watchlist, setMovieDetails }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
@@ -7,10 +15,16 @@ export default function Watchlist({ setShowPage, watchlist, setMovieDetails }) {
   return (
     <View>
       <View style={styles.icons}>
-        <Text style={styles.icon} onPress={() => setShowPage("Startpage")}>
-          ⇦
-        </Text>
-        <Text style={styles.icon}>My Watchlist ♥</Text>
+        <Ionicons
+          name="chevron-back-circle"
+          size={35}
+          color="pink"
+          onPress={() => setShowPage("Startpage")}
+        />
+        <View style={styles.icons}>
+          <Text style={styles.icon}>My Watchlist </Text>
+          <Ionicons name="heart" size={35} color="pink" />
+        </View>
       </View>
       <ScrollView>
         <View style={styles.container}>

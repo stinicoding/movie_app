@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
+import Ionicons from "@react-native-vector-icons/ionicons"; //npm i @react-native-vector-icons/ionicons
 import { useState, useEffect } from "react";
 import Carousel from "./Carousel.js";
 import {
@@ -48,16 +49,25 @@ export default function Startpage({
     <View>
       <View style={styles.icons}>
         <View style={styles.icons}>
-          <Text style={styles.icon} onPress={() => setShowPage("GenreOverview")}>
+          <Text
+            style={styles.icon}
+            onPress={() => setShowPage("GenreOverview")}
+          >
             ☰
           </Text>
-          <Text style={styles.caption_genre} onPress={() => setShowPage("GenreOverview")}>
+          <Text
+            style={styles.caption_genre}
+            onPress={() => setShowPage("GenreOverview")}
+          >
             Genres
           </Text>
         </View>
-        <Text style={styles.icon} onPress={() => setShowPage("Watchlist")}>
-          ♥
-        </Text>
+        <Ionicons
+          name="heart"
+          size={35}
+          color="pink"
+          onPress={() => setShowPage("Watchlist")}
+        />
       </View>
       <View style={styles.container}>
         <View style={styles.box}>
@@ -147,6 +157,7 @@ export default function Startpage({
 const styles = StyleSheet.create({
   page: {
     marginBottom: 420,
+    maxHeight: "80%",
   },
   container: {
     alignItems: "center",
