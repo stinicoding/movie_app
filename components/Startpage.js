@@ -49,12 +49,13 @@ export default function Startpage({
     <View>
       <View style={styles.icons}>
         <View style={styles.icons}>
-          <Text
-            style={styles.icon}
+          <Ionicons
+            name="filter-sharp"
+            size={35}
+            color="pink"
             onPress={() => setShowPage("GenreOverview")}
-          >
-            ☰
-          </Text>
+          />
+
           <Text
             style={styles.caption_genre}
             onPress={() => setShowPage("GenreOverview")}

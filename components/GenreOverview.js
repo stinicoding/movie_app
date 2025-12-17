@@ -32,7 +32,10 @@ export default function GenreOverview({ setShowPage, setGenre }) {
           color="pink"
           onPress={() => setShowPage("Startpage")}
         />
-        <Text style={styles.icon}>Genres ☰</Text>
+        <View style={styles.icons}>
+          <Text style={styles.icon}>Genres </Text>
+          <Ionicons name="filter-sharp" size={35} color="pink" />
+        </View>
       </View>
       <ScrollView style={styles.page}>
         <View style={styles.container}>
