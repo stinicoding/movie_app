@@ -5,6 +5,7 @@ import Startpage from "./components/Startpage.js";
 import MovieDetails from "./components/MovieDetails.js";
 import MovieList from "./components/MovieList.js";
 import Watchlist from "./components/Watchlist.js";
+import GenreOverview from "./components/GenreOverview.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
@@ -29,7 +30,7 @@ export default function App() {
   //Navigation for back-button
   useEffect(() => {
     getWatchlist();
-    if (showPage === "Startpage") {
+    if (showPage === "Startpage" || showPage === "GenreOverview") {
       setBack("Startpage")
     } else if (showPage === "Watchlist") {
       setBack("Watchlist")
@@ -78,6 +79,11 @@ export default function App() {
               watchlist={watchlist}
               setMovieDetails={setMovieDetails}
               setBack={setBack}
+            />
+          )}
+          {showPage === "GenreOverview" && (
+            <GenreOverview
+              setShowPage={setShowPage}
             />
           )}
         </SafeAreaView>

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
 import { useState, useEffect } from "react";
 import Carousel from "./Carousel.js";
 import {
@@ -47,6 +47,14 @@ export default function Startpage({
   return (
     <View>
       <View style={styles.icons}>
+        <View style={styles.icons}>
+          <Text style={styles.icon} onPress={() => setShowPage("GenreOverview")}>
+            ☰
+          </Text>
+          <Text style={styles.caption_genre} onPress={() => setShowPage("GenreOverview")}>
+            Genres
+          </Text>
+        </View>
         <Text style={styles.icon} onPress={() => setShowPage("Watchlist")}>
           ♥
         </Text>
@@ -75,66 +83,71 @@ export default function Startpage({
             ))}
           </View>
         )}
-        <View style={styles.carousel}>
-          <Text
-            style={styles.scroll_caption}
-            onPress={() => {
-              setShowPage("MovieList");
-              setShowList("Top100");
-            }}
-          >
-            Top Movies
-          </Text>
-          <Carousel
-            data={topMovies}
-            onPress={(movie) => {
-              setMovieDetails(movie);
-              setShowPage("MovieDetails");
-            }}
-          />
-        </View>
-        <View style={styles.carousel}>
-          <Text
-            style={styles.scroll_caption}
-            onPress={() => {
-              setShowPage("MovieList");
-              setShowList("Trending");
-            }}
-          >
-            Trending Movies
-          </Text>
-          <Carousel
-            data={trendingWeek}
-            onPress={(movie) => {
-              setMovieDetails(movie);
-              setShowPage("MovieDetails");
-            }}
-          />
-        </View>
-        <View style={styles.carousel}>
-          <Text
-            style={styles.scroll_caption}
-            onPress={() => {
-              setShowPage("MovieList");
-              setShowList("Upcoming");
-            }}
-          >
-            Coming Soon
-          </Text>
-          <Carousel
-            data={upcomingMovies}
-            onPress={(movie) => {
-              setMovieDetails(movie);
-              setShowPage("MovieDetails");
-            }}
-          />
-        </View>
+        <ScrollView style={styles.page}>
+          <View style={styles.carousel}>
+            <Text
+              style={styles.scroll_caption}
+              onPress={() => {
+                setShowPage("MovieList");
+                setShowList("Top100");
+              }}
+            >
+              Top Movies
+            </Text>
+            <Carousel
+              data={topMovies}
+              onPress={(movie) => {
+                setMovieDetails(movie);
+                setShowPage("MovieDetails");
+              }}
+            />
+          </View>
+          <View style={styles.carousel}>
+            <Text
+              style={styles.scroll_caption}
+              onPress={() => {
+                setShowPage("MovieList");
+                setShowList("Trending");
+              }}
+            >
+              Trending Movies
+            </Text>
+            <Carousel
+              data={trendingWeek}
+              onPress={(movie) => {
+                setMovieDetails(movie);
+                setShowPage("MovieDetails");
+              }}
+            />
+          </View>
+          <View style={styles.carousel}>
+            <Text
+              style={styles.scroll_caption}
+              onPress={() => {
+                setShowPage("MovieList");
+                setShowList("Upcoming");
+              }}
+            >
+              Coming Soon
+            </Text>
+            <Carousel
+              data={upcomingMovies}
+              onPress={(movie) => {
+                setMovieDetails(movie);
+                setShowPage("MovieDetails");
+              }}
+            />
+          </View>
+        </ScrollView>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  page: {
+    marginBottom: 420,
+  },
   container: {
     alignItems: "center",
   },
@@ -144,11 +157,18 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   icons: {
-    marginLeft: "auto",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginLeft: 10,
     marginRight: 10,
   },
   icon: {
     fontSize: 35,
+    color: "pink",
+  },
+  caption_genre: {
+    fontSize: 20,
     color: "pink",
   },
   caption: {
