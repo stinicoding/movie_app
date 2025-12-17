@@ -63,7 +63,7 @@ export default function Startpage({
           <View style={styles.search}>
             {movies.map((movie, idx) => (
               <Text
-                key={idx}
+                key={movie.id}
                 style={styles.suggestions}
                 onPress={() => {
                   setMovieDetails(movie);
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     fontSize: 21,
     color: "#3a0381ff",
-    fontWeight: 600,
+    fontWeight: "600",
     marginBottom: 10,
   },
   input: {

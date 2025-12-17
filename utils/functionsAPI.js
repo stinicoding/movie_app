@@ -66,13 +66,18 @@ export const getTrendingWeek = async () => {
 
 //setUpcomingMovies
 export const getUpcoming = async () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   try {
     const requests = [
       tmdbClient.get("/movie/upcoming", { params: { page: 1 } }),
       tmdbClient.get("/movie/upcoming", { params: { page: 2 } }),
     ];
     const responses = await Promise.all(requests);
-    return responses.flatMap((r) => r.data.results);
+    return responses
+      .flatMap((r) => r.data.results)
+      .filter((m) => new Date(m.release_date) >= today)
+      .sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
   } catch (error) {
     console.log(error);
   }

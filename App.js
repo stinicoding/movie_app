@@ -26,12 +26,15 @@ export default function App() {
     }
   };
 
+  //Navigation for back-button
   useEffect(() => {
     getWatchlist();
     if (showPage === "Startpage") {
       setBack("Startpage")
     } else if (showPage === "Watchlist") {
       setBack("Watchlist")
+    } else if (showPage === "MovieList") {
+      setBack("MovieList")
     }
   }, [showPage]);
 

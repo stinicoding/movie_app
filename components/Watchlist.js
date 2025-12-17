@@ -22,7 +22,7 @@ export default function Watchlist({ setShowPage, watchlist, setMovieDetails }) {
                     setMovieDetails(movie);
                     setShowPage("MovieDetails");
                   }}
-                  key={idx}
+                  key={movie.id}
                 >
                   <Image
                     style={styles.poster}
