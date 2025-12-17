@@ -31,7 +31,7 @@ export default function MovieDetails({
     try {
       const response = await axios.get(GENRES);
       const all_genres = response.data.genres;
-      const genre_list = movie.genre_ids.map((id) => {
+      const genre_list = movie?.genre_ids?.map((id) => {
         return all_genres.find((g) => g.id === id)?.name;
       });
       setGenres(genre_list);
@@ -44,7 +44,7 @@ export default function MovieDetails({
     try {
       const response = await axios.get(CAST);
       const all_cast = response.data.cast;
-      const cast_list = all_cast.slice(0, 5).map((c) => c?.name);
+      const cast_list = all_cast?.slice(0, 5).map((c) => c?.name);
       setCast(cast_list);
     } catch (error) {
       console.log(error);

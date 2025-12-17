@@ -11,7 +11,7 @@ const tmdbClient = axios.create({
   },
 });
 
-//setMovies
+//setMovies (search on Startpage)
 export const searchMovie = async (query) => {
   if (!query) return [];
   try {
@@ -78,6 +78,22 @@ export const getUpcoming = async () => {
       .flatMap((r) => r.data.results)
       .filter((m) => new Date(m.release_date) >= today)
       .sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//setMovies (filter per Genre in MovieListPerGenre)
+export const getMoviesByGenre = async (genre_id, page = 1) => {
+  try {
+    const response = await tmdbClient.get("/discover/movie", {
+      params: {
+        with_genres: genre_id,
+        sort_by: "popularity.desc",
+        page,
+      },
+    });
+    return response.data.results;
   } catch (error) {
     console.log(error);
   }

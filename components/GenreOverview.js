@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
 import { useState, useEffect } from "react";
 import { API_KEY } from "../config.js";
 import axios from "axios";
 
-export default function GenreOverview({ setShowPage }) {
-  const [genres, setGenres] = useState([]);
+export default function GenreOverview({ setShowPage, setGenre }) {
   const GENRES = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`;
+  const [genres, setGenres] = useState([]);
   //console.log(genres);
 
   const getGenres = async () => {
@@ -32,10 +32,17 @@ export default function GenreOverview({ setShowPage }) {
       </View>
       <ScrollView style={styles.page}>
         <View style={styles.container}>
-          {genres.map((genre, idx) => (
-            <View key={genre.id} style={styles.box}>
+          {genres?.map((genre, idx) => (
+            <Pressable
+              key={genre.id}
+              style={styles.box}
+              onPress={() => {
+                setShowPage("MovieListPerGenre");
+                setGenre(genre);
+              }}
+            >
               <Text style={styles.caption}>{genre.name}</Text>
-            </View>
+            </Pressable>
           ))}
         </View>
       </ScrollView>
@@ -55,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     margin: 10,
-    alignItems: "center"
+    alignItems: "center",
   },
   icons: {
     flexDirection: "row",

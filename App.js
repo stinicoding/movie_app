@@ -6,6 +6,7 @@ import MovieDetails from "./components/MovieDetails.js";
 import MovieList from "./components/MovieList.js";
 import Watchlist from "./components/Watchlist.js";
 import GenreOverview from "./components/GenreOverview.js";
+import MovieListPerGenre from "./components/MovieListPerGenre.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
   const [watchlist, setWatchlist] = useState([]);
   const [back, setBack] = useState("");
   const [showList, setShowList] = useState("");
+  const [genre, setGenre] = useState({});
 
   const getWatchlist = async () => {
     try {
@@ -30,12 +32,16 @@ export default function App() {
   //Navigation for back-button
   useEffect(() => {
     getWatchlist();
-    if (showPage === "Startpage" || showPage === "GenreOverview") {
-      setBack("Startpage")
+    if (showPage === "Startpage") {
+      setBack("Startpage");
     } else if (showPage === "Watchlist") {
-      setBack("Watchlist")
+      setBack("Watchlist");
     } else if (showPage === "MovieList") {
-      setBack("MovieList")
+      setBack("MovieList");
+    } else if (showPage === "GenreOverview") {
+      setBack("GenreOverview");
+    } else if (showPage === "MovieListPerGenre") {
+      setBack("MovieListPerGenre");
     }
   }, [showPage]);
 
@@ -82,8 +88,13 @@ export default function App() {
             />
           )}
           {showPage === "GenreOverview" && (
-            <GenreOverview
+            <GenreOverview setShowPage={setShowPage} setGenre={setGenre} />
+          )}
+          {showPage === "MovieListPerGenre" && (
+            <MovieListPerGenre
               setShowPage={setShowPage}
+              setMovieDetails={setMovieDetails}
+              genre={genre}
             />
           )}
         </SafeAreaView>

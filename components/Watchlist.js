@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, ScrollView, Pressable } from "react-nati
 export default function Watchlist({ setShowPage, watchlist, setMovieDetails }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   //console.log(watchlist);
+
   return (
     <View>
       <View style={styles.icons}>
