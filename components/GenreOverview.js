@@ -41,7 +41,7 @@ export default function GenreOverview({ setShowPage, setGenre }) {
         <View style={styles.container}>
           {genres?.map((genre, idx) => (
             <Pressable
-              key={genre.id}
+              key={idx}
               style={styles.box}
               onPress={() => {
                 setShowPage("MovieListPerGenre");

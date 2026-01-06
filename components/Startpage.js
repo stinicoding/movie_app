@@ -82,7 +82,7 @@ export default function Startpage({
           <View style={styles.search}>
             {movies.map((movie, idx) => (
               <Text
-                key={movie.id}
+                key={idx}
                 style={styles.suggestions}
                 onPress={() => {
                   setMovieDetails(movie);
