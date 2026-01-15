@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "white",
-    backgroundColor: "#740168ff",
+    backgroundColor: "#F7628C",
     borderRadius: 50,
     marginBottom: "5%",
     marginTop: "5%",

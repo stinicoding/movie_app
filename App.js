@@ -48,11 +48,11 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <ImageBackground
-        source={require("./purple.jpg")}
+        source={require("./bg.jpg")}
         style={styles.background}
         resizeMode="cover"
       >
-        <SafeAreaView>
+        <SafeAreaView style={styles.background}>
           {showPage === "Startpage" && (
             <Startpage
               setShowPage={setShowPage}

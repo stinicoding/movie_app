@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, TextInput, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  Image,
+} from "react-native";
 import Ionicons from "@react-native-vector-icons/ionicons"; //npm i @react-native-vector-icons/ionicons
 import { useState, useEffect } from "react";
 import Carousel from "./Carousel.js";
@@ -8,6 +15,7 @@ import {
   getTrendingWeek,
   getUpcoming,
 } from "../utils/functionsAPI.js";
+import logo from "../M_logo-removebg.png";
 
 export default function Startpage({
   setShowPage,
@@ -49,26 +57,23 @@ export default function Startpage({
     <View>
       <View style={styles.icons}>
         <View style={styles.icons}>
+          <Image style={styles.logo} source={logo} />
+          <Text style={styles.movio}>MOVIO</Text>
+        </View>
+        <View style={styles.icons}>
           <Ionicons
             name="filter-sharp"
             size={35}
             color="pink"
             onPress={() => setShowPage("GenreOverview")}
           />
-
-          <Text
-            style={styles.caption_genre}
-            onPress={() => setShowPage("GenreOverview")}
-          >
-            Genres
-          </Text>
-        </View>
         <Ionicons
           name="heart"
           size={35}
           color="pink"
           onPress={() => setShowPage("Watchlist")}
         />
+        </View>
       </View>
       <View style={styles.container}>
         <View style={styles.box}>
@@ -168,11 +173,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     minWidth: "90%",
-    marginTop:10,
+    marginTop: 10,
   },
   icons: {
     flexDirection: "row",
     justifyContent: "space-between",
+    gap: 10,
     alignItems: "center",
     marginLeft: 10,
     marginRight: 10,
@@ -181,6 +187,15 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: "pink",
   },
+  logo: {
+    width: 40,
+    height: 40,
+  },
+  movio: {
+    fontFamily: "Inter",
+    fontSize: 24,
+    color: "white",
+  },
   caption_genre: {
     fontSize: 20,
     color: "pink",
@@ -188,7 +203,7 @@ const styles = StyleSheet.create({
   caption: {
     fontFamily: "Inter",
     fontSize: 21,
-    color: "#3a0381ff",
+    color: "#011748",
     fontWeight: "600",
     marginBottom: 10,
   },
