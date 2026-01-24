@@ -74,17 +74,14 @@ export default function App() {
               setShowPage={setShowPage}
               setMovieDetails={setMovieDetails}
               movie={movieDetails}
-              back={back}
               showList={showList}
             />
           )}
           {showPage === "Watchlist" && (
             <Watchlist
               setShowPage={setShowPage}
-              movie={movieDetails}
               watchlist={watchlist}
               setMovieDetails={setMovieDetails}
-              setBack={setBack}
             />
           )}
           {showPage === "GenreOverview" && (
