@@ -7,19 +7,24 @@ import {
   Pressable,
 } from "react-native";
 import Ionicons from "@react-native-vector-icons/ionicons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   getTopRated,
   getTrendingWeek,
   getUpcoming,
 } from "../utils/functionsAPI.js";
 
-export default function MovieList({ setShowPage, setMovieDetails, showList }) {
+export default function MovieList({
+  setShowPage,
+  setMovieDetails,
+  showList,
+  sorting,
+  setSorting,
+}) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   const [topMovies, setTopMovies] = useState([]);
   const [trendingWeek, setTrendingWeek] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [sorting, setSorting] = useState("popularity");
   const [openSorting, setOpenSorting] = useState(false);
 
   const sortingOptions = ["alphabet", "rating", "release date", "popularity"];
@@ -32,40 +37,21 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
     return formattedDate;
   };
 
-  const sortMovies = (sortedby) => {
-    let movies = [...trendingWeek];
-    if (showList === "Trending") {
-      if (sortedby === "release date") {
-        setTrendingWeek(
-          movies.sort(
-            (a, b) => new Date(a.release_date) - new Date(b.release_date),
-          ),
+  const sortMovies = (movies, sortedby) => {
+    const arr = [...movies];
+    switch (sortedby) {
+      case "release date":
+        return arr.sort(
+          (a, b) => new Date(a.release_date) - new Date(b.release_date),
         );
-      } else if (sortedby === "popularity") {
-        setTrendingWeek(movies.sort((a, b) => b.popularity - a.popularity));
-      } else if (sortedby === "alphabet") {
-        setTrendingWeek(movies.sort((a, b) => a.title.localeCompare(b.title)));
-      } else if (sortedby === "rating") {
-        setTrendingWeek(movies.sort((a, b) => b.vote_average - a.vote_average));
-      }
-    } else if (showList === "Upcoming") {
-      if (sortedby === "release date") {
-        setUpcomingMovies(
-          movies.sort(
-            (a, b) => new Date(a.release_date) - new Date(b.release_date),
-          ),
-        );
-      } else if (sortedby === "popularity") {
-        setUpcomingMovies(movies.sort((a, b) => b.popularity - a.popularity));
-      } else if (sortedby === "alphabet") {
-        setUpcomingMovies(
-          movies.sort((a, b) => a.title.localeCompare(b.title)),
-        );
-      } else if (sortedby === "rating") {
-        setUpcomingMovies(
-          movies.sort((a, b) => b.vote_average - a.vote_average),
-        );
-      }
+      case "popularity":
+        return arr.sort((a, b) => b.popularity - a.popularity);
+      case "alphabet":
+        return arr.sort((a, b) => a.title.localeCompare(b.title));
+      case "rating":
+        return arr.sort((a, b) => b.vote_average - a.vote_average);
+      default:
+        return arr;
     }
   };
 
@@ -82,9 +68,12 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
     loadData();
   }, []);
 
-  useEffect(() => {
-    sortMovies(sorting);
-  }, [sorting]);
+  const sortedTrendingWeek = useMemo(() => {
+    return sortMovies(trendingWeek, sorting);
+  }, [trendingWeek, sorting]);
+  const sortedUpcomingMovies = useMemo(() => {
+    return sortMovies(upcomingMovies, sorting);
+  }, [upcomingMovies, sorting]);
 
   return (
     <View>
@@ -155,8 +144,8 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
           </View>
           <ScrollView style={styles.page}>
             <View style={styles.container}>
-              {trendingWeek?.length > 0 &&
-                trendingWeek.map((movie, idx) => {
+              {sortedTrendingWeek?.length > 0 &&
+                sortedTrendingWeek.map((movie, idx) => {
                   return (
                     <Pressable
                       style={styles.imgwrapper}
@@ -202,8 +191,8 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
           </View>
           <ScrollView style={styles.page}>
             <View style={styles.container}>
-              {upcomingMovies?.length > 0 &&
-                upcomingMovies.map((movie, idx) => {
+              {sortedUpcomingMovies?.length > 0 &&
+                sortedUpcomingMovies.map((movie, idx) => {
                   return (
                     <Pressable
                       style={styles.imgwrapper}

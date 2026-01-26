@@ -90,12 +90,12 @@ export default function MovieDetails({
         if (previousMovies === null) {
           storedMovies = await AsyncStorage.setItem(
             "favs",
-            JSON.stringify([movie])
+            JSON.stringify([movie]),
           );
         } else {
           storedMovies = await AsyncStorage.setItem(
             "favs",
-            JSON.stringify([...JSON.parse(previousMovies), movie])
+            JSON.stringify([...JSON.parse(previousMovies), movie]),
           );
         }
         //console.log(storedMovies);

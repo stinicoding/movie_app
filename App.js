@@ -16,6 +16,7 @@ export default function App() {
   const [back, setBack] = useState("");
   const [showList, setShowList] = useState("");
   const [genre, setGenre] = useState({});
+  const [sorting, setSorting] = useState("popularity");
 
   const getWatchlist = async () => {
     try {
@@ -75,6 +76,8 @@ export default function App() {
               setMovieDetails={setMovieDetails}
               movie={movieDetails}
               showList={showList}
+              sorting={sorting}
+              setSorting={setSorting}
             />
           )}
           {showPage === "Watchlist" && (
