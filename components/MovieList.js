@@ -127,20 +127,22 @@ export default function MovieList({
           <Text style={styles.caption}>Trending of the Week</Text>
           <View style={styles.sortingview}>
             <Pressable onPress={() => setOpenSorting(true)}>
-              <Text style={styles.sorting}>Sorted by: {sorting}</Text>
+              <Text style={styles.sorting_bold}>Sorted by: {sorting}</Text>
             </Pressable>
             {openSorting &&
-              sortingOptions.map((ele, idx) => (
-                <Pressable
-                  key={idx}
-                  onPress={() => {
-                    setSorting(ele);
-                    setOpenSorting(false);
-                  }}
-                >
-                  <Text style={styles.sorting}>{ele}</Text>
-                </Pressable>
-              ))}
+              sortingOptions
+                .filter((ele) => ele !== sorting)
+                .map((ele, idx) => (
+                  <Pressable
+                    key={idx}
+                    onPress={() => {
+                      setSorting(ele);
+                      setOpenSorting(false);
+                    }}
+                  >
+                    <Text style={styles.sorting}>{ele}</Text>
+                  </Pressable>
+                ))}
           </View>
           <ScrollView style={styles.page}>
             <View style={styles.container}>
@@ -174,20 +176,22 @@ export default function MovieList({
           <Text style={styles.caption}> Coming Soon</Text>
           <View style={styles.sortingview}>
             <Pressable onPress={() => setOpenSorting(true)}>
-              <Text style={styles.sorting}>Sorted by: {sorting}</Text>
+              <Text style={styles.sorting_bold}>Sorted by: {sorting}</Text>
             </Pressable>
             {openSorting &&
-              sortingOptions.map((ele, idx) => (
-                <Pressable
-                  key={idx}
-                  onPress={() => {
-                    setSorting(ele);
-                    setOpenSorting(false);
-                  }}
-                >
-                  <Text style={styles.sorting}>{ele}</Text>
-                </Pressable>
-              ))}
+              sortingOptions
+                .filter((ele) => ele !== sorting)
+                .map((ele, idx) => (
+                  <Pressable
+                    key={idx}
+                    onPress={() => {
+                      setSorting(ele);
+                      setOpenSorting(false);
+                    }}
+                  >
+                    <Text style={styles.sorting}>{ele}</Text>
+                  </Pressable>
+                ))}
           </View>
           <ScrollView style={styles.page}>
             <View style={styles.container}>
@@ -225,6 +229,19 @@ const styles = StyleSheet.create({
   sorting: {
     fontFamily: "Inter",
     fontSize: 16,
+    backgroundColor: "white",
+    color: "#011748",
+    textAlign: "center",
+    padding: 5,
+    borderRadius: 5,
+    marginLeft: "10%",
+    marginRight: "10%",
+    marginBottom: 5,
+  },
+  sorting_bold: {
+    fontFamily: "Inter",
+    fontSize: 16,
+    fontWeight: "600",
     backgroundColor: "white",
     color: "#011748",
     textAlign: "center",

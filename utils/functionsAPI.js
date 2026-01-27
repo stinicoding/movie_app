@@ -69,10 +69,10 @@ export const getUpcoming = async () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   try {
-    const requests = [
-      tmdbClient.get("/movie/upcoming", { params: { page: 1 } }),
-      tmdbClient.get("/movie/upcoming", { params: { page: 2 } }),
-    ];
+    const requests = [];
+    for (let page = 1; page <= 5; page++) {
+      requests.push(tmdbClient.get("/movie/upcoming", { params: { page } }));
+    }
     const responses = await Promise.all(requests);
     return responses
       .flatMap((r) => r.data.results)
