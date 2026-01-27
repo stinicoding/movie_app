@@ -20,12 +20,13 @@ export default function MovieList({
   showList,
   sorting,
   setSorting,
+  openSorting,
+  setOpenSorting,
 }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   const [topMovies, setTopMovies] = useState([]);
   const [trendingWeek, setTrendingWeek] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [openSorting, setOpenSorting] = useState(false);
 
   const sortingOptions = ["alphabet", "rating", "release date", "popularity"];
 

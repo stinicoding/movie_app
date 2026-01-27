@@ -17,6 +17,7 @@ export default function App() {
   const [showList, setShowList] = useState("");
   const [genre, setGenre] = useState({});
   const [sorting, setSorting] = useState("popularity");
+  const [openSorting, setOpenSorting] = useState(false);
 
   const getWatchlist = async () => {
     try {
@@ -78,6 +79,8 @@ export default function App() {
               showList={showList}
               sorting={sorting}
               setSorting={setSorting}
+              openSorting={openSorting}
+              setOpenSorting={setOpenSorting}
             />
           )}
           {showPage === "Watchlist" && (
@@ -95,6 +98,10 @@ export default function App() {
               setShowPage={setShowPage}
               setMovieDetails={setMovieDetails}
               genre={genre}
+              sorting={sorting}
+              setSorting={setSorting}
+              openSorting={openSorting}
+              setOpenSorting={setOpenSorting}
             />
           )}
         </SafeAreaView>
