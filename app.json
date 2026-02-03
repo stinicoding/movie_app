@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "movieapp",
-    "slug": "movieapp",
-    "version": "1.0.1",
+    "name": "movioapp",
+    "slug": "movioapp",
+    "version": "1.0.2",
+    "description": "A movie app to keep an eye on new releases, trending movies and series.",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -13,17 +14,28 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.barcelonacodeschool.movioapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.barcelonacodeschool.movioapp",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9ab65ee0-5634-4632-9ec8-b8ab1b2f39af"
+      }
     }
   }
 }
