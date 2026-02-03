@@ -7,17 +7,41 @@ import {
   Pressable,
 } from "react-native";
 import Ionicons from "@react-native-vector-icons/ionicons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getMoviesByGenre } from "../utils/functionsAPI";
 
 export default function MovieListPerGenre({
   genre,
   setShowPage,
   setMovieDetails,
+  sorting,
+  setSorting,
+  openSorting,
+  setOpenSorting,
 }) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   const [movies, setMovies] = useState([]);
   //console.log(movies);
+
+  const sortingOptions = ["alphabet", "rating", "release date", "popularity"];
+
+  const sortMovies = (movies, sortedby) => {
+    const arr = [...movies];
+    switch (sortedby) {
+      case "release date":
+        return arr.sort(
+          (a, b) => new Date(a.release_date) - new Date(b.release_date),
+        );
+      case "popularity":
+        return arr.sort((a, b) => b.popularity - a.popularity);
+      case "alphabet":
+        return arr.sort((a, b) => a.title.localeCompare(b.title));
+      case "rating":
+        return arr.sort((a, b) => b.vote_average - a.vote_average);
+      default:
+        return arr;
+    }
+  };
 
   useEffect(() => {
     const filterMovies = async () => {
@@ -30,6 +54,10 @@ export default function MovieListPerGenre({
     };
     filterMovies();
   }, []);
+
+  const sortedMovies = useMemo(() => {
+    return sortMovies(movies, sorting);
+  }, [movies, sorting]);
 
   return (
     <View>
@@ -48,10 +76,29 @@ export default function MovieListPerGenre({
         />
       </View>
       <Text style={styles.caption}>{genre.name}</Text>
+      <View style={styles.sortingview}>
+        <Pressable onPress={() => setOpenSorting(true)}>
+          <Text style={styles.sorting_bold}>Sorted by: {sorting}</Text>
+        </Pressable>
+        {openSorting &&
+          sortingOptions
+            .filter((ele) => ele !== sorting)
+            .map((ele, idx) => (
+              <Pressable
+                key={idx}
+                onPress={() => {
+                  setSorting(ele);
+                  setOpenSorting(false);
+                }}
+              >
+                <Text style={styles.sorting}>{ele}</Text>
+              </Pressable>
+            ))}
+      </View>
       <ScrollView style={styles.page}>
         <View style={styles.container}>
-          {movies?.length > 0 &&
-            movies.map((movie, idx) => {
+          {sortedMovies?.length > 0 &&
+            sortedMovies.map((movie, idx) => {
               return (
                 <Pressable
                   style={styles.imgwrapper}
@@ -59,7 +106,7 @@ export default function MovieListPerGenre({
                     setMovieDetails(movie);
                     setShowPage("MovieDetails");
                   }}
-                  key={movie.id}
+                  key={idx}
                 >
                   <Image
                     style={styles.poster}
@@ -80,6 +127,34 @@ export default function MovieListPerGenre({
 const styles = StyleSheet.create({
   page: {
     marginBottom: 60,
+  },
+  sorting: {
+    fontFamily: "Inter",
+    fontSize: 16,
+    backgroundColor: "white",
+    color: "#011748",
+    textAlign: "center",
+    padding: 5,
+    borderRadius: 5,
+    marginLeft: "10%",
+    marginRight: "10%",
+    marginBottom: 5,
+  },
+  sorting_bold: {
+    fontFamily: "Inter",
+    fontSize: 16,
+    fontWeight: "600",
+    backgroundColor: "white",
+    color: "#011748",
+    textAlign: "center",
+    padding: 5,
+    borderRadius: 5,
+    marginLeft: "10%",
+    marginRight: "10%",
+    marginBottom: 5,
+  },
+  sortingview: {
+    marginBottom: 10,
   },
   container: {
     flexDirection: "row",

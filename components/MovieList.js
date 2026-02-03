@@ -7,24 +7,53 @@ import {
   Pressable,
 } from "react-native";
 import Ionicons from "@react-native-vector-icons/ionicons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   getTopRated,
   getTrendingWeek,
   getUpcoming,
 } from "../utils/functionsAPI.js";
 
-export default function MovieList({ setShowPage, setMovieDetails, showList }) {
+export default function MovieList({
+  setShowPage,
+  setMovieDetails,
+  showList,
+  sorting,
+  setSorting,
+  openSorting,
+  setOpenSorting,
+}) {
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   const [topMovies, setTopMovies] = useState([]);
   const [trendingWeek, setTrendingWeek] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
+
+  const sortingOptions = ["alphabet", "rating", "release date", "popularity"];
+
   //console.log(topMovies);
 
   const formatDate = (movie) => {
     const [year, month, day] = movie.release_date.split("-");
     const formattedDate = `${day}.${month}.${year}`;
     return formattedDate;
+  };
+
+  const sortMovies = (movies, sortedby) => {
+    const arr = [...movies];
+    switch (sortedby) {
+      case "release date":
+        return arr.sort(
+          (a, b) => new Date(a.release_date) - new Date(b.release_date),
+        );
+      case "popularity":
+        return arr.sort((a, b) => b.popularity - a.popularity);
+      case "alphabet":
+        return arr.sort((a, b) => a.title.localeCompare(b.title));
+      case "rating":
+        return arr.sort((a, b) => b.vote_average - a.vote_average);
+      default:
+        return arr;
+    }
   };
 
   useEffect(() => {
@@ -39,6 +68,13 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
     };
     loadData();
   }, []);
+
+  const sortedTrendingWeek = useMemo(() => {
+    return sortMovies(trendingWeek, sorting);
+  }, [trendingWeek, sorting]);
+  const sortedUpcomingMovies = useMemo(() => {
+    return sortMovies(upcomingMovies, sorting);
+  }, [upcomingMovies, sorting]);
 
   return (
     <View>
@@ -70,7 +106,7 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
                         setMovieDetails(movie);
                         setShowPage("MovieDetails");
                       }}
-                      key={movie.id}
+                      key={idx}
                     >
                       <Text style={styles.ranking}>{idx + 1}</Text>
                       <Image
@@ -90,10 +126,29 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
       {showList === "Trending" && (
         <View>
           <Text style={styles.caption}>Trending of the Week</Text>
+          <View style={styles.sortingview}>
+            <Pressable onPress={() => setOpenSorting(true)}>
+              <Text style={styles.sorting_bold}>Sorted by: {sorting}</Text>
+            </Pressable>
+            {openSorting &&
+              sortingOptions
+                .filter((ele) => ele !== sorting)
+                .map((ele, idx) => (
+                  <Pressable
+                    key={idx}
+                    onPress={() => {
+                      setSorting(ele);
+                      setOpenSorting(false);
+                    }}
+                  >
+                    <Text style={styles.sorting}>{ele}</Text>
+                  </Pressable>
+                ))}
+          </View>
           <ScrollView style={styles.page}>
             <View style={styles.container}>
-              {trendingWeek?.length > 0 &&
-                trendingWeek.map((movie, idx) => {
+              {sortedTrendingWeek?.length > 0 &&
+                sortedTrendingWeek.map((movie, idx) => {
                   return (
                     <Pressable
                       style={styles.imgwrapper}
@@ -101,7 +156,7 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
                         setMovieDetails(movie);
                         setShowPage("MovieDetails");
                       }}
-                      key={movie.id}
+                      key={idx}
                     >
                       <Image
                         style={styles.poster}
@@ -120,10 +175,29 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
       {showList === "Upcoming" && (
         <View>
           <Text style={styles.caption}> Coming Soon</Text>
+          <View style={styles.sortingview}>
+            <Pressable onPress={() => setOpenSorting(true)}>
+              <Text style={styles.sorting_bold}>Sorted by: {sorting}</Text>
+            </Pressable>
+            {openSorting &&
+              sortingOptions
+                .filter((ele) => ele !== sorting)
+                .map((ele, idx) => (
+                  <Pressable
+                    key={idx}
+                    onPress={() => {
+                      setSorting(ele);
+                      setOpenSorting(false);
+                    }}
+                  >
+                    <Text style={styles.sorting}>{ele}</Text>
+                  </Pressable>
+                ))}
+          </View>
           <ScrollView style={styles.page}>
             <View style={styles.container}>
-              {upcomingMovies?.length > 0 &&
-                upcomingMovies.map((movie, idx) => {
+              {sortedUpcomingMovies?.length > 0 &&
+                sortedUpcomingMovies.map((movie, idx) => {
                   return (
                     <Pressable
                       style={styles.imgwrapper}
@@ -131,7 +205,7 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
                         setMovieDetails(movie);
                         setShowPage("MovieDetails");
                       }}
-                      key={movie.id}
+                      key={idx}
                     >
                       <Text style={styles.date}>{formatDate(movie)}</Text>
                       <Image
@@ -152,6 +226,34 @@ export default function MovieList({ setShowPage, setMovieDetails, showList }) {
 const styles = StyleSheet.create({
   page: {
     marginBottom: 60,
+  },
+  sorting: {
+    fontFamily: "Inter",
+    fontSize: 16,
+    backgroundColor: "white",
+    color: "#011748",
+    textAlign: "center",
+    padding: 5,
+    borderRadius: 5,
+    marginLeft: "10%",
+    marginRight: "10%",
+    marginBottom: 5,
+  },
+  sorting_bold: {
+    fontFamily: "Inter",
+    fontSize: 16,
+    fontWeight: "600",
+    backgroundColor: "white",
+    color: "#011748",
+    textAlign: "center",
+    padding: 5,
+    borderRadius: 5,
+    marginLeft: "10%",
+    marginRight: "10%",
+    marginBottom: 5,
+  },
+  sortingview: {
+    marginBottom: 10,
   },
   container: {
     flexDirection: "row",
@@ -198,7 +300,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "white",
-    backgroundColor: "#740168ff",
+    backgroundColor: "#F7628C",
     borderRadius: 50,
     marginBottom: "5%",
     marginTop: "5%",

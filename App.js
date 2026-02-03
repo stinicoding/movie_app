@@ -16,6 +16,8 @@ export default function App() {
   const [back, setBack] = useState("");
   const [showList, setShowList] = useState("");
   const [genre, setGenre] = useState({});
+  const [sorting, setSorting] = useState("popularity");
+  const [openSorting, setOpenSorting] = useState(false);
 
   const getWatchlist = async () => {
     try {
@@ -48,11 +50,11 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <ImageBackground
-        source={require("./purple.jpg")}
+        source={require("./bg.jpg")}
         style={styles.background}
         resizeMode="cover"
       >
-        <SafeAreaView>
+        <SafeAreaView style={styles.background}>
           {showPage === "Startpage" && (
             <Startpage
               setShowPage={setShowPage}
@@ -74,17 +76,18 @@ export default function App() {
               setShowPage={setShowPage}
               setMovieDetails={setMovieDetails}
               movie={movieDetails}
-              back={back}
               showList={showList}
+              sorting={sorting}
+              setSorting={setSorting}
+              openSorting={openSorting}
+              setOpenSorting={setOpenSorting}
             />
           )}
           {showPage === "Watchlist" && (
             <Watchlist
               setShowPage={setShowPage}
-              movie={movieDetails}
               watchlist={watchlist}
               setMovieDetails={setMovieDetails}
-              setBack={setBack}
             />
           )}
           {showPage === "GenreOverview" && (
@@ -95,6 +98,10 @@ export default function App() {
               setShowPage={setShowPage}
               setMovieDetails={setMovieDetails}
               genre={genre}
+              sorting={sorting}
+              setSorting={setSorting}
+              openSorting={openSorting}
+              setOpenSorting={setOpenSorting}
             />
           )}
         </SafeAreaView>

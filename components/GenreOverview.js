@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   caption: {
     fontFamily: "Inter",
     fontSize: 21,
-    color: "#3a0381ff",
+    color: "#011748",
     fontWeight: "600",
   },
 });
